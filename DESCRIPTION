@@ -1,6 +1,6 @@
 Package: STDistance
 Title: Spatial Transcriptomics Distance Calculation and Visualization
-Version: 0.6.0
+Version: 0.6.2
 Authors@R: 
     c(person(given = "Zixiang", family = "Wang", 
              email = "wangzixiang@sdu.edu.cn", 
@@ -12,9 +12,8 @@ Authors@R:
       person(given = "Zhaojian", family = "Liu", 
              email = "liujian9782@sdu.edu.cn", 
              role = "aut"))                      
-Description: Calculates nearest distances between cell types in spatial transcriptomics data
-    and provides visualization tools.
-License: GPL-3
+Description: STDistance is an R package designed for analyzing spatial relationships between cell types in spatial transcriptomics data. It calculates nearest neighbor distances between specified cell types and provides comprehensive visualization tools to explore spatial patterns. The package is particularly useful for studying cell-cell interactions, immune microenvironment characterization, and spatial organization of tissues.
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
