@@ -20,7 +20,7 @@ install.packages("STDistance")
 # Or install the development version from GitHub:
 # install.packages("devtools")
 library(devtools)
-devtools::install_github("PrinceWang2018/STDistance")
+devtools::install_github("PrinceWang2018/ST_Distance")
 ```
 
 ## Dependencies
