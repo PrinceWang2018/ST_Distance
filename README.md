@@ -76,6 +76,16 @@ STDistance requires two input files:
 
 ## Basic Workflow
 
+Demo data is available in the `Demodata` folder of the R package installed from GitHub. Alternatively, you can download the files directly using the following commands:
+
+```shell
+wget https://github.com/PrinceWang2018/ST_Distance/raw/master/Demodata/Demo_SP6_SP8_metadata.csv  
+wget https://github.com/PrinceWang2018/ST_Distance/raw/master/Demodata/Demo_SP6_SP8_tissue_positions.csv  
+wget https://github.com/PrinceWang2018/ST_Distance/raw/master/Demodata/Demo_SP8_SP6.RDS  
+```
+
+Below is a basic workflow demonstrating how to use the demo data for reference:
+
 ### 1. Load required packages and data
 
 ```r
