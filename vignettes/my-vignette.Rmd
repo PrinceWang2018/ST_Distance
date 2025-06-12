@@ -1,10 +1,20 @@
-# STDistance - Spatial Transcriptomics Distance Calculation and Visualization
+---
+title: "STDistance - Spatial Transcriptomics Distance Calculation and Visualization"
+author: "Zixiang Wang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 ## Description
 
 STDistance is an R package designed for analyzing spatial relationships between cell types in spatial transcriptomics data. It calculates nearest neighbor distances between specified cell types and provides comprehensive visualization tools to explore spatial patterns. The package is particularly useful for studying cell-cell interactions, immune microenvironment characterization, and spatial organization of tissues.
 
 Key features include:
+
 - Distance calculation between reference and target cell types
 - Boxplot visualization of distance distributions
 - Radial network visualization of spatial relationships
@@ -26,6 +36,7 @@ devtools::install_github("PrinceWang2018/ST_Distance")
 ## Dependencies
 
 STDistance requires R (≥ 4.0.0) and depends on the following packages:
+
 - dplyr
 - ggplot2
 - Hmisc
@@ -39,35 +50,42 @@ STDistance requires R (≥ 4.0.0) and depends on the following packages:
 STDistance requires two input files:
 
 1. **Spatial coordinates file** (e.g., `tissue_positions.csv`):
-   
+
    - Should contain spatial coordinates of spots/cells
+
    - Must include columns for barcode, x and y coordinates
+
    - For multiple samples, include "Sample" and "Newbarcode" columns
+
    - Example format:
+
      ```
-     barcode,in_tissue,array_row,array_col,pxl_row_in_fullres,pxl_col_in_fullres,Sample,Sampleid,Newbarcode
+     barcode,in_tissue,array_row,array_col,pxl_row_in_fullres,pxl_col_in_fullres
+     ,Sample,Sampleid,Newbarcode
      AAACCCAAGGCTTTCA-1_1,1,50,102,4950,10020,Sample1,1,AAACCCAAGGCTTTCA-1_1
      ```
-   
+
 2. **Metadata file** (e.g., `metadata.csv`):
-   
+
    - Should contain cell type annotations and any expression metrics
-   
+
    - Must include: orig.ident, celltype columns
-   
+
    - The first colume must match the barcode/newbarcode column in tissue_positions.csv
-   
+
    - May include gene expression or splicing index values
-   
+
    - Example format:
-   
+
      ```
-     ,orig.ident,nCount_Spatial,nFeature_Spatial,nCount_SCT,nFeature_SCT,integrated_snn_res.0.8,seurat_clusters,celltype_ABCDepi,gen2_SPLIz_numeric
+     ,orig.ident,nCount_Spatial,nFeature_Spatial,nCount_SCT,nFeature_SCT,
+     integrated_snn_res.0.8,seurat_clusters,celltype_ABCDepi,gen2_SPLIz_numeric
      AAATCGTGTACCACAA-1_6,SP6,5403,2647,6486,2601,5,5,Epithelial_cells_B,0.96565309
      AACCCTACTGTCAATA-1_6,SP6,40683,8876,8578,4328,4,4,Epithelial_cells_A,-0.300446291
      ```
-   
+
    - Can be exported from Seurat object using:
+
      ```r
      library(Seurat)
      RDS<-readRDS("./demo/Demo_SP8_SP6.RDS")
@@ -159,6 +177,7 @@ plot_radial_distance(
 ### 7. Spatial visualization of interactions
 
 Between two cell types:
+
 ```r
 visualize_spatial_network(
   posi,
@@ -174,6 +193,7 @@ visualize_spatial_network(
 ```
 
 Between reference and multiple target types:
+
 ```r
 visualize_spatial_multinetwork(
   posi,
@@ -189,6 +209,7 @@ visualize_spatial_multinetwork(
 ```
 
 With expression gradient:
+
 ```r
 visualize_spatial_gradient(
   spatial_data = posi,
@@ -264,9 +285,23 @@ If you use STDistance in your research, please cite:
 ## Contact
 
 For questions or issues, please contact:
+
 - 970214035yl@gmail.com or wangzixiang@sdu.edu.cn
 - GitHub issues: https://github.com/PrinceWang2018/STDistance/issues
 
 ## License
 
 GPL-3 © Zixiang Wang, Lei Yang, Zhaojian Liu
+
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(STDistance)
+```
