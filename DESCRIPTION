@@ -1,0 +1,34 @@
+Package: STDistance
+Title: Spatial Transcriptomics Distance Calculation and Visualization
+Version: 0.5.0
+Authors@R: 
+    c(person(given = "Zixiang", family = "Wang", 
+             email = "wangzixiang@sdu.edu.cn", 
+             role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0001-5252-9764")),
+      person(given = "Lei", family = "Yang", 
+             email = "970214035@qq.com", 
+             role = "aut"),
+      person(given = "Zhaojian", family = "Liu", 
+             email = "liujian9782@sdu.edu.cn", 
+             role = "aut"))                      
+Description: Calculates nearest distances between cell types in spatial transcriptomics data
+    and provides visualization tools.
+License: GPL-3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: R (>= 4.0.0)
+Imports: 
+    dplyr,
+    ggplot2,
+    Hmisc,
+    scales,
+    stats,
+    RColorBrewer,
+    tidyr,
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+LazyData: true
