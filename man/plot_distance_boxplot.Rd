@@ -33,10 +33,5 @@ and SEM error bars. Suitable for comparing multiple groups with potentially
 skewed distributions.
 }
 \examples{
-\dontrun{
-# After running calculate_nearest_distances()
-result <- calculate_nearest_distances(spatial_data, "Tumor", c("Bcell", "Tcell"))
-plot_distance_boxplot(result, show_points = TRUE)
-}
 plot_distance_boxplot(distance_results,id_col = "Newbarcode")
 }

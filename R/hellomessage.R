@@ -3,7 +3,7 @@
 
   msg <- paste0("=========================================================================================
 ", pkgname, " version ", version, "
-Project URL: https://github.com/PrinceWang2018/STDistance
+Project URL: https://github.com/PrinceWang2018/ST_Distance
 If you use it in published research, please cite:
 Wang, Z., Yang, L., Yang, S., Li, G., Xu, M., Kong, B., Shao, C., & Liu, Z. (2025).
 Isoform switch of CD47 provokes macrophage-mediated pyroptosis in ovarian cancer.

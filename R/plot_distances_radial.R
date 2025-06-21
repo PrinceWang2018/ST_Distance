@@ -11,7 +11,6 @@
 #' @param palette Color palette name (default: "Set2")
 #' @param label_padding Radial padding for labels (default: 0.15)
 #' @param center_label_expansion Center expansion for labels (default: 1.5)
-#'
 #' @return A ggplot2 object
 #' @export
 #' @import ggplot2

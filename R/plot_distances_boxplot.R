@@ -10,15 +10,7 @@
 #' @param show_points Logical, whether to overlay individual data points (default: FALSE).
 #' @param y_scale Method for y-axis scaling: "original" or "log10" (default: "original").
 #' @param palette Color palette name from `RColorBrewer` (default: "Set2").
-#'
 #' @return A ggplot2 object. Additional customization can be done using ggplot2 functions.
-#'
-#' @examples
-#' \dontrun{
-#' # After running calculate_nearest_distances()
-#' result <- calculate_nearest_distances(spatial_data, "Tumor", c("Bcell", "Tcell"))
-#' plot_distance_boxplot(result, show_points = TRUE)
-#' }
 #' @export
 #' @import ggplot2
 #' @import dplyr
