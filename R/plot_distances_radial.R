@@ -134,7 +134,7 @@ plot_radial_distance <- function(distance_result,
     theme(
       legend.position = "none",
       plot.margin = unit(c(1,1,1,1), "cm"),
-      plot.title = element_text(hjust = 0.5, face = "bold")
+      plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 20))
     ) +
     labs(title = paste("Radial Layout:", reference_type, "as Center"))
 
