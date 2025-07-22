@@ -53,7 +53,7 @@ plot_radial_distance <- function(distance_result,
                  names_to = "target",
                  values_to = "distance") %>%
     mutate(
-      radius = rescale(1/distance, to = c(0.2, 0.8)) * scale_radius
+      radius = rescale(distance, to = c(0.2, 0.8)) * scale_radius
     )
 
   # --- Calculate Coordinates ---
