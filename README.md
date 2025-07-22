@@ -68,20 +68,27 @@ STDistance requires two input files:
      ```
    
    - Can be exported from Seurat object using:
+     
+     ```shell
+     wget https://github.com/PrinceWang2018/ST_Distance_demo/raw/master/Demo_SP6_SP8.RDS
+     ```
+     
      ```r
      library(Seurat)
-     RDS<-readRDS("./demo/Demo_SP8_SP6.RDS")
-     write.csv(RDS@meta.data,file = "./demo/Demo_SP6_SP8_metadata.csv",quote = F)
+     RDS <- readRDS("Demo_SP6_SP8.RDS")
+     write.csv(RDS@meta.data, file = "Demo_SP6_SP8_metadata.csv", quote = F)
      ```
+     
 
-## Basic Workflow
+## Basic Work flow
 
-Demo data is available in the `demo` folder of the R package installed from GitHub. Alternatively, you can download the files directly using the following commands:
+Demo data is available in the `./inst/extdata/` folder of the R package installed from GitHub. 
+
+Alternatively, you can download the files directly using the following commands:
 
 ```shell
-wget https://github.com/PrinceWang2018/ST_Distance/raw/master/demo/Demo_SP6_SP8_metadata.csv  
-wget https://github.com/PrinceWang2018/ST_Distance/raw/master/demo/Demo_SP6_SP8_tissue_positions.csv  
-wget https://github.com/PrinceWang2018/ST_Distance/raw/master/demo/Demo_SP8_SP6.RDS  
+wget https://github.com/PrinceWang2018/ST_Distance/raw/master/inst/extdata/Demo_SP6_SP8_metadata.csv
+wget https://github.com/PrinceWang2018/ST_Distance/raw/master/inst/extdata/Demo_SP6_SP8_tissue_positions.csv
 ```
 
 Below is a basic workflow demonstrating how to use the demo data for reference:
@@ -93,10 +100,9 @@ library(STDistance)
 setwd("R package dir or work dir")
 
 # Load spatial coordinates
-tissue_posi <- read.csv("./demo/Demo_SP6_SP8_tissue_positions.csv", header = TRUE)
-
+tissue_posi <- read.csv(system.file("extdata/Demo_SP6_SP8_tissue_positions.csv",package = "STDistance"), header = TRUE)
 # Load metadata
-metadata <- read.csv("./demo/Demo_SP6_SP8_metadata.csv", header = TRUE, row.names = 1)
+metadata <- read.csv(system.file("extdata/Demo_SP6_SP8_metadata.csv",package = "STDistance"), header = TRUE, row.names = 1)
 ```
 
 ### 2. Normalize spatial coordinates
@@ -199,7 +205,7 @@ visualize_spatial_gradient(
   type_col = "celltype_ABCDepi",
   fixed_color = "#CCCCCC",
   line_color = "#444444",
-  gradient_palette = "viridis",
+  gradient_palette = "C", # Viridis color palette option: "A","B",C"...
   point_size = 1.5,
   point_alpha = 0.9
 )
