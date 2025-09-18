@@ -1,5 +1,5 @@
 # STDistance - Spatial Transcriptomics Distance Calculation and Visualization
-
+[![DOI](https://zenodo.org/badge/999352906.svg)](https://doi.org/10.5281/zenodo.17149296)
 ## Description
 
 STDistance is an R package designed for analyzing spatial relationships between cell types in spatial transcriptomics data. It calculates nearest neighbor distances between specified cell types and provides comprehensive visualization tools to explore spatial patterns. The package is particularly useful for studying cell-cell interactions, immune microenvironment characterization, and spatial organization of tissues.
