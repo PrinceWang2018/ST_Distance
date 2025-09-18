@@ -1,0 +1,9 @@
+cff-version: 1.0.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: Wang
+  given-names: Zixiang
+orcid: https://orcid.org/0000-0001-5252-9764
+title:PrinceWang2018/ST_Distance: STDistance - Spatial Transcriptomics Distance Calculation and Visualization
+version: v0.6.6-zenodo
+date-released: 2025-09-18
