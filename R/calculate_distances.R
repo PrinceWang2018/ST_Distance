@@ -7,6 +7,9 @@
 #' @param y_col Column name for y-coordinates
 #' @param id_col Column name for cell identifiers
 #' @param type_col Column name for cell type information
+#' @param sample_col Column name for sample identifiers; when provided, distances
+#'   are calculated within each sample independently so cells from different
+#'   tissue sections are never compared
 #' @return A data frame with nearest distances for each reference cell
 #' @export
 #' @examples
@@ -14,19 +17,36 @@
 #'                  target_types=c("Epithelial_cells_A","Epithelial_cells_B",
 #'                  "Epithelial_cells_C","Epithelial_cells_D"),
 #'                  id_col = "Newbarcode",
-#'                  type_col = "celltype_ABCDepi")
+#'                  type_col = "celltype_ABCDepi",
+#'                  sample_col = "orig.ident")
 
 calculate_nearest_distances <- function(spatial_data, reference_type, target_types,
                                         x_col = "pxl_row_in_fullres",
                                         y_col = "pxl_col_in_fullres",
                                         id_col = "barcode",
-                                        type_col = "Epi_strom") {
+                                        type_col = "Epi_strom",
+                                        sample_col = NULL) {
 
   # Input validation
   required_cols <- c(x_col, y_col, id_col, type_col)
+  if (!is.null(sample_col)) required_cols <- c(required_cols, sample_col)
   if(!all(required_cols %in% names(spatial_data))) {
     stop(paste("Missing required columns:",
                paste(setdiff(required_cols, names(spatial_data)), collapse = ", ")))
+  }
+
+  # When sample_col is given, recurse per sample and combine
+  if (!is.null(sample_col)) {
+    samples <- unique(spatial_data[[sample_col]])
+    results <- lapply(samples, function(s) {
+      calculate_nearest_distances(
+        spatial_data[spatial_data[[sample_col]] == s, ],
+        reference_type, target_types,
+        x_col = x_col, y_col = y_col, id_col = id_col, type_col = type_col,
+        sample_col = NULL
+      )
+    })
+    return(do.call(rbind, results))
   }
 
   # Split data into reference and target

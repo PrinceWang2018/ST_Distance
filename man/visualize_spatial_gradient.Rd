@@ -13,6 +13,7 @@ visualize_spatial_gradient(
   x_col = "pxl_row_in_fullres",
   y_col = "pxl_col_in_fullres",
   type_col = "Epi_strom",
+  sample_col = "Sample",
   fixed_color = "#A9C6D9",
   line_color = "#666666",
   gradient_palette = "C",
@@ -44,6 +45,8 @@ visualize_spatial_gradient(
 \item{y_col}{Column name for y-coordinates (default "pxl_col_in_fullres")}
 
 \item{type_col}{Column name for cell type information (default "Epi_strom")}
+
+\item{sample_col}{Column name for sample identifiers (default: "Sample")}
 
 \item{fixed_color}{Color for the fixed cell type (default "#A9C6D9" - light gray-blue)}
 

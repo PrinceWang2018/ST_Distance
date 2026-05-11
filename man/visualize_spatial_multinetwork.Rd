@@ -12,6 +12,7 @@ visualize_spatial_multinetwork(
   x_col = "pxl_row_in_fullres",
   y_col = "pxl_col_in_fullres",
   type_col = "Epi_strom",
+  sample_col = "Sample",
   color_palette = NULL,
   point_alpha = 0.7,
   line_alpha = 0.5,
@@ -34,6 +35,8 @@ visualize_spatial_multinetwork(
 \item{y_col}{Column name for y-coordinates}
 
 \item{type_col}{Column name for cell type information}
+
+\item{sample_col}{Column name for sample identifiers (default: "Sample")}
 
 \item{color_palette}{Named vector of colors for cell types}
 

@@ -8,6 +8,7 @@
 #' @param x_col Column name for x-coordinates (default "pxl_row_in_fullres")
 #' @param y_col Column name for y-coordinates (default "pxl_col_in_fullres")
 #' @param type_col Column name for cell type information (default "Epi_strom")
+#' @param sample_col Column name for sample identifiers (default: "Sample")
 #' @param fixed_color Color for the fixed cell type (default "#A9C6D9" - light gray-blue)
 #' @param line_color Color for connection lines (default "#666666" - dark gray)
 #' @param gradient_palette Color palette for expression gradient (default viridis option "C")
@@ -42,6 +43,7 @@ visualize_spatial_gradient <- function(spatial_data,
                                        x_col = "pxl_row_in_fullres",
                                        y_col = "pxl_col_in_fullres",
                                        type_col = "Epi_strom",
+                                       sample_col = "Sample",
                                        fixed_color = "#A9C6D9",
                                        line_color = "#666666",
                                        gradient_palette = "C",
@@ -72,7 +74,7 @@ visualize_spatial_gradient <- function(spatial_data,
   }
 
   #Choose sample
-  spatial_data_sample <- spatial_data[spatial_data[["Sample"]] == sample, ]
+  spatial_data_sample <- spatial_data[spatial_data[[sample_col]] == sample, ]
 
   # Filter cells for the two types
   gradient_cells <- spatial_data_sample[spatial_data_sample[[type_col]] == gradient_type, ]

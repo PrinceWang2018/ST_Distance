@@ -9,19 +9,22 @@ calculate_correlations(
   distance_results,
   spatial_feature,
   distance_metric,
+  id_col = "Newbarcode",
   method = "pearson",
   plot = TRUE,
   plot_title = NULL
 )
 }
 \arguments{
-\item{spatial_data}{Spatial data containing feature columns and Newbarcode identifier}
+\item{spatial_data}{Spatial data containing feature columns and cell identifier}
 
-\item{distance_results}{Distance results containing distance metrics and Newbarcode identifier}
+\item{distance_results}{Distance results containing distance metrics and cell identifier}
 
 \item{spatial_feature}{Column name from spatial_data to use for correlation (e.g., "gen2_SPLIz_numeric")}
 
 \item{distance_metric}{Column name from distance_results to use for correlation (e.g., "Epithelial_cells_A")}
+
+\item{id_col}{Column name used to join spatial_data and distance_results (default: "Newbarcode")}
 
 \item{method}{Correlation method ("pearson", "spearman", "kendall")}
 
@@ -40,6 +43,7 @@ calculate_correlations(spatial_data = posi,
              distance_results = distance_results,
              spatial_feature = "gen2_SPLIz_numeric",
              distance_metric = "Epithelial_cells_A",
+             id_col = "Newbarcode",
              method = "pearson",
              plot = TRUE,
              plot_title = "Correlation between Gene Expression and Distance")

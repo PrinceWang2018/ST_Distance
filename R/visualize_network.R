@@ -7,6 +7,7 @@
 #' @param x_col Column name for x-coordinates
 #' @param y_col Column name for y-coordinates
 #' @param type_col Column name for cell type information
+#' @param sample_col Column name for sample identifiers (default: "Sample")
 #' @param color_palette Named vector of colors for cell types
 #' @param alpha Transparency level for points and lines
 #' @return A ggplot object showing the spatial relationships
@@ -26,12 +27,13 @@ visualize_spatial_network <- function(spatial_data, sample, reference_type, targ
                                       x_col = "pxl_row_in_fullres",
                                       y_col = "pxl_col_in_fullres",
                                       type_col = "Epi_strom",
+                                      sample_col = "Sample",
                                       color_palette = c("Macrophage" = "#90ee90",
                                                         "Epithelial_cells_A" = "#377EB8"),
                                       alpha = 0.7) {
 
   #Choose sample
-  spatial_data_sample <- spatial_data[spatial_data[["Sample"]] == sample, ]
+  spatial_data_sample <- spatial_data[spatial_data[[sample_col]] == sample, ]
 
   # Filter and prepare data
   reference_cells <- spatial_data_sample[spatial_data_sample[[type_col]] == reference_type, ]

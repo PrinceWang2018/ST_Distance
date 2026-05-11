@@ -4,6 +4,7 @@
 #' @param distance_results Distance results containing distance metrics and Newbarcode identifier
 #' @param spatial_feature Column name from spatial_data to use for correlation (e.g., "gen2_SPLIz_numeric")
 #' @param distance_metric Column name from distance_results to use for correlation (e.g., "Epithelial_cells_A")
+#' @param id_col Column name used to join spatial_data and distance_results (default: "Newbarcode")
 #' @param method Correlation method ("pearson", "spearman", "kendall")
 #' @param plot Logical, whether to generate a scatter plot
 #' @param plot_title Title for the scatter plot (optional)
@@ -18,6 +19,7 @@
 #'              distance_results = distance_results,
 #'              spatial_feature = "gen2_SPLIz_numeric",
 #'              distance_metric = "Epithelial_cells_A",
+#'              id_col = "Newbarcode",
 #'              method = "pearson",
 #'              plot = TRUE,
 #'              plot_title = "Correlation between Gene Expression and Distance")
@@ -26,6 +28,7 @@ calculate_correlations <- function(spatial_data,
                                    distance_results,
                                    spatial_feature,
                                    distance_metric,
+                                   id_col = "Newbarcode",
                                    method = "pearson",
                                    plot = TRUE,
                                    plot_title = NULL) {
@@ -39,9 +42,17 @@ calculate_correlations <- function(spatial_data,
     stop(paste("Distance metric", distance_metric, "not found in distance_results"))
   }
 
-  # Merge data by Newbarcode
+  if (!id_col %in% colnames(spatial_data)) {
+    stop(paste("ID column", id_col, "not found in spatial_data"))
+  }
+
+  if (!id_col %in% colnames(distance_results)) {
+    stop(paste("ID column", id_col, "not found in distance_results"))
+  }
+
+  # Merge data by id_col
   merged_data <- merge(spatial_data, distance_results,
-                       by = "Newbarcode", all.x = FALSE)
+                       by = id_col, all.x = FALSE)
 
   # Extract the columns of interest
   x <- merged_data[[spatial_feature]]

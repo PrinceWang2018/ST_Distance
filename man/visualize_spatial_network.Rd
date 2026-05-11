@@ -12,6 +12,7 @@ visualize_spatial_network(
   x_col = "pxl_row_in_fullres",
   y_col = "pxl_col_in_fullres",
   type_col = "Epi_strom",
+  sample_col = "Sample",
   color_palette = c(Macrophage = "#90ee90", Epithelial_cells_A = "#377EB8"),
   alpha = 0.7
 )
@@ -30,6 +31,8 @@ visualize_spatial_network(
 \item{y_col}{Column name for y-coordinates}
 
 \item{type_col}{Column name for cell type information}
+
+\item{sample_col}{Column name for sample identifiers (default: "Sample")}
 
 \item{color_palette}{Named vector of colors for cell types}
 

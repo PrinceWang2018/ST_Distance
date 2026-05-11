@@ -11,7 +11,8 @@ calculate_nearest_distances(
   x_col = "pxl_row_in_fullres",
   y_col = "pxl_col_in_fullres",
   id_col = "barcode",
-  type_col = "Epi_strom"
+  type_col = "Epi_strom",
+  sample_col = NULL
 )
 }
 \arguments{
@@ -28,6 +29,10 @@ calculate_nearest_distances(
 \item{id_col}{Column name for cell identifiers}
 
 \item{type_col}{Column name for cell type information}
+
+\item{sample_col}{Column name for sample identifiers; when provided, distances
+are calculated within each sample independently so cells from different
+tissue sections are never compared}
 }
 \value{
 A data frame with nearest distances for each reference cell
@@ -40,5 +45,6 @@ calculate_nearest_distances(posi, reference_type="Macrophage",
                  target_types=c("Epithelial_cells_A","Epithelial_cells_B",
                  "Epithelial_cells_C","Epithelial_cells_D"),
                  id_col = "Newbarcode",
-                 type_col = "celltype_ABCDepi")
+                 type_col = "celltype_ABCDepi",
+                 sample_col = "orig.ident")
 }

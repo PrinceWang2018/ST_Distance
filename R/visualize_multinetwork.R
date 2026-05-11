@@ -7,6 +7,7 @@
 #' @param x_col Column name for x-coordinates
 #' @param y_col Column name for y-coordinates
 #' @param type_col Column name for cell type information
+#' @param sample_col Column name for sample identifiers (default: "Sample")
 #' @param color_palette Named vector of colors for cell types
 #' @param point_alpha Transparency level for points
 #' @param line_alpha Transparency level for connection lines
@@ -31,6 +32,7 @@ visualize_spatial_multinetwork <- function(spatial_data,
                                       x_col = "pxl_row_in_fullres",
                                       y_col = "pxl_col_in_fullres",
                                       type_col = "Epi_strom",
+                                      sample_col = "Sample",
                                       color_palette = NULL,
                                       point_alpha = 0.7,
                                       line_alpha = 0.5,
@@ -54,7 +56,7 @@ visualize_spatial_multinetwork <- function(spatial_data,
   }
 
   #Choose sample
-  spatial_data_sample <- spatial_data[spatial_data[["Sample"]] == sample, ]
+  spatial_data_sample <- spatial_data[spatial_data[[sample_col]] == sample, ]
 
   # Filter reference cells
   reference_cells <- spatial_data_sample[spatial_data_sample[[type_col]] == reference_type, ]
