@@ -1,6 +1,6 @@
 Package: STDistance
 Title: Spatial Transcriptomics Distance Calculation and Visualization
-Version: 0.6.7
+Version: 0.6.6
 Authors@R: 
     c(person(given = "Zixiang", family = "Wang", 
              email = "wangzixiang@sdu.edu.cn", 
@@ -12,7 +12,7 @@ Authors@R:
       person(given = "Zhaojian", family = "Liu", 
              email = "liujian9782@sdu.edu.cn", 
              role = "aut"))                      
-Description: Analysis of spatial relationships between cell types in spatial transcriptomics data. Spatial proximity is a critical factor in cell-cell communication. The package calculates nearest neighbor distances between specified cell types and provides visualization tools to explore spatial patterns. Input can be supplied as a plain data frame or directly as a Seurat v5 object or RDS file, with spatial coordinates extracted automatically. For multi-sample datasets, a sample-aware mode restricts nearest-neighbour matching to within-sample comparisons, preventing cross-sample artefacts. Output includes both the distance and the barcode of the nearest target spot for each reference cell, enabling straightforward merging with external metadata. Applications include studying cell-cell interactions, immune microenvironment characterization, and spatial organization of tissues.
+Description: Analysis of spatial relationships between cell types in spatial transcriptomics data. Spatial proximity is a critical factor in cell-cell communication. The package calculates nearest neighbor distances between specified cell types and provides visualization tools to explore spatial patterns. Applications include studying cell-cell interactions, immune microenvironment characterization, and spatial organization of tissues.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -26,11 +26,9 @@ Imports:
     stats,
     RColorBrewer,
     tidyr,
-Suggests:
+Suggests: 
     testthat,
     knitr,
-    rmarkdown,
-    Seurat,
-    SeuratObject
+    rmarkdown
 LazyData: true
 VignetteBuilder: knitr

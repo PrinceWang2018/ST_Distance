@@ -1,21 +1,11 @@
 # STDistance - Spatial Transcriptomics Distance Calculation and Visualization
 [![DOI](https://zenodo.org/badge/999352906.svg)](https://doi.org/10.5281/zenodo.17149296)
-
-## What's New — v0.6.7
-
-- **Direct RDS input**: `calculate_nearest_distances()` now accepts a file path to a Seurat v5 RDS file (or a live Seurat object) as `spatial_data`. Spatial coordinates are extracted automatically — no manual CSV preparation required.
-- **Sample-aware distance calculation**: New `sample_col` parameter (e.g. `sample_col = "orig.ident"`) splits multi-sample objects by sample before calculating distances, preventing cross-sample nearest-neighbour matches in pooled datasets.
-- **New helper `seurat_to_spatial_df()`**: Converts a Seurat v5 object to the flat data frame format used internally. Exported so users can inspect or modify the extracted data before passing it onward.
-- **Nearest-target barcode in output**: Each target type now produces two side-by-side columns — `<target>` (distance) and `<target>_barcode` (barcode of the nearest target spot) — making it straightforward to `merge()` results with metadata.
-
 ## Description
 
 STDistance is an R package designed for analyzing spatial relationships between cell types in spatial transcriptomics data. It calculates nearest neighbor distances between specified cell types and provides comprehensive visualization tools to explore spatial patterns. The package is particularly useful for studying cell-cell interactions, immune microenvironment characterization, and spatial organization of tissues.
 
 Key features include:
 - Distance calculation between reference and target cell types
-- Direct input from Seurat v5 RDS files with automatic coordinate extraction
-- Sample-aware distance calculation for multi-sample datasets
 - Boxplot visualization of distance distributions
 - Radial network visualization of spatial relationships
 - Spatial mapping of cell type interactions
@@ -44,56 +34,13 @@ STDistance requires R (≥ 4.0.0) and depends on the following packages:
 - RColorBrewer
 - tidyr
 
-For RDS / Seurat input (v0.6.7+):
-- Seurat (≥ 5.0)
-- SeuratObject (≥ 5.0)
-
 ## Input File Preparation
 
-STDistance supports two input routes. Use whichever fits your data.
-
-### Option A — Seurat v5 RDS file (recommended, v0.6.7+)
-
-Pass a file path to a Seurat v5 RDS directly as `spatial_data`. The package extracts spot coordinates and cell type labels automatically. No manual CSV export is needed.
-
-```r
-# Minimal example — coordinates and labels are extracted from the RDS automatically
-distance_results <- calculate_nearest_distances(
-  spatial_data   = "Demo_SP6_SP8_v5.RDS",
-  reference_type = "Macrophage",
-  target_types   = c("Epithelial_cells_A", "Epithelial_cells_B",
-                     "Epithelial_cells_C", "Epithelial_cells_D"),
-  type_col       = "celltype_ABCDepi",
-  sample_col     = "orig.ident"   # recommended for multi-sample objects
-)
-```
-
-> **Multi-sample objects**: always set `sample_col = "orig.ident"` (or whichever metadata column identifies the sample). Without it, a reference spot in sample A can be matched to the nearest target spot in sample B, producing physically meaningless distances.
-
-If your Seurat object was built with an older version of Seurat, update it first:
-
-```r
-library(Seurat)
-obj <- readRDS("Demo_SP6_SP8.RDS")
-obj <- UpdateSeuratObject(obj)
-saveRDS(obj, "Demo_SP6_SP8_v5.RDS")
-```
-
-The helper `seurat_to_spatial_df()` is also available if you want to inspect the extracted data frame before running the distance calculation:
-
-```r
-df <- seurat_to_spatial_df(obj,
-  type_col  = "celltype_ABCDepi",
-  meta_cols = "orig.ident")   # carry over any extra metadata columns
-head(df)
-```
-
-### Option B — CSV files (classic workflow)
-
-STDistance accepts two plain CSV files:
+STDistance requires two input files:
 
 1. **Spatial coordinates file** (e.g., `tissue_positions.csv`):
    
+   - Should contain spatial coordinates of spots/cells
    - Must include columns for barcode, x and y coordinates
    - For multiple samples, include "Sample" and "Newbarcode" columns
    - Example format:
@@ -104,125 +51,93 @@ STDistance accepts two plain CSV files:
    
 2. **Metadata file** (e.g., `metadata.csv`):
    
-   - Must include `orig.ident` and a cell type column
-   - First column must match the barcode/Newbarcode column in the coordinates file
+   - Should contain cell type annotations and any expression metrics
+   
+   - Must include: orig.ident, celltype columns
+   
+   - The first colume must match the barcode/newbarcode column in tissue_positions.csv
+   
    - May include gene expression or splicing index values
+   
    - Example format:
+   
      ```
-     ,orig.ident,nCount_Spatial,nFeature_Spatial,celltype_ABCDepi,gen2_SPLIz_numeric
-     AAATCGTGTACCACAA-1_6,SP6,5403,2647,Epithelial_cells_B,0.96565309
-     AACCCTACTGTCAATA-1_6,SP6,40683,8876,Epithelial_cells_A,-0.300446291
+     ,orig.ident,nCount_Spatial,nFeature_Spatial,nCount_SCT,nFeature_SCT,integrated_snn_res.0.8,seurat_clusters,celltype_ABCDepi,gen2_SPLIz_numeric
+     AAATCGTGTACCACAA-1_6,SP6,5403,2647,6486,2601,5,5,Epithelial_cells_B,0.96565309
+     AACCCTACTGTCAATA-1_6,SP6,40683,8876,8578,4328,4,4,Epithelial_cells_A,-0.300446291
      ```
-   - Can be exported from a Seurat object using:
+   
+   - Can be exported from Seurat object using:
+     
+     ```shell
+     wget https://github.com/PrinceWang2018/ST_Distance_demo/raw/master/Demo_SP6_SP8.RDS
+     ```
+     
      ```r
      library(Seurat)
-     RDS <- readRDS("Demo_SP6_SP8_v5.RDS")
-     write.csv(RDS@meta.data, file = "Demo_SP6_SP8_metadata.csv", quote = FALSE)
+     RDS <- readRDS("Demo_SP6_SP8.RDS")
+     write.csv(RDS@meta.data, file = "Demo_SP6_SP8_metadata.csv", quote = F)
      ```
-
+     
 
 ## Basic Work flow
 
-Demo data is available in the `./inst/extdata/` folder of the R package installed from GitHub.
+Demo data is available in the `./inst/extdata/` folder of the R package installed from GitHub. 
 
-### Workflow A — RDS input (v0.6.7+, recommended)
-
-Download the Seurat v5 demo RDS from the demo repository:
-
-```shell
-wget https://github.com/PrinceWang2018/ST_Distance_demo/raw/master/Demo_SP6_SP8_v5.RDS
-```
-
-#### 1. Calculate nearest distances directly from the RDS
-
-```r
-library(STDistance)
-
-distance_results <- calculate_nearest_distances(
-  spatial_data   = "Demo_SP6_SP8_v5.RDS",
-  reference_type = "Macrophage",
-  target_types   = c("Epithelial_cells_A", "Epithelial_cells_B",
-                     "Epithelial_cells_C", "Epithelial_cells_D"),
-  type_col       = "celltype_ABCDepi",
-  sample_col     = "orig.ident"   # enables within-sample matching
-)
-```
-
-The output contains one row per reference spot, with distance and nearest-target barcode columns side by side for each target type:
-
-```
-               barcode orig.ident  Epithelial_cells_A  Epithelial_cells_A_barcode  ...
-ATAGTGAAGCGTTCTC-1_6      SP6          122.3          ATAAGTTACCGCGACG-1_6       ...
-```
-
-The `_barcode` columns make it easy to merge distance results back with any metadata:
-
-```r
-# Example: attach metadata for the nearest Epithelial_cells_A spot
-merged <- merge(distance_results, metadata,
-                by.x = "Epithelial_cells_A_barcode",
-                by.y = "row.names")
-```
-
----
-
-### Workflow B — CSV input (classic)
-
-Demo CSVs are available in the `./inst/extdata/` folder of the installed package, or can be downloaded directly:
+Alternatively, you can download the files directly using the following commands:
 
 ```shell
 wget https://github.com/PrinceWang2018/ST_Distance/raw/master/inst/extdata/Demo_SP6_SP8_metadata.csv
 wget https://github.com/PrinceWang2018/ST_Distance/raw/master/inst/extdata/Demo_SP6_SP8_tissue_positions.csv
 ```
 
-#### 1. Load required packages and data
+Below is a basic workflow demonstrating how to use the demo data for reference:
+
+### 1. Load required packages and data
 
 ```r
 library(STDistance)
 setwd("R package dir or work dir")
 
 # Load spatial coordinates
-tissue_posi <- read.csv(system.file("extdata/Demo_SP6_SP8_tissue_positions.csv",
-                                    package = "STDistance"), header = TRUE)
+tissue_posi <- read.csv(system.file("extdata/Demo_SP6_SP8_tissue_positions.csv",package = "STDistance"), header = TRUE)
 # Load metadata
-metadata <- read.csv(system.file("extdata/Demo_SP6_SP8_metadata.csv",
-                                  package = "STDistance"), header = TRUE, row.names = 1)
+metadata <- read.csv(system.file("extdata/Demo_SP6_SP8_metadata.csv",package = "STDistance"), header = TRUE, row.names = 1)
 ```
 
-#### 2. Normalize spatial coordinates
+### 2. Normalize spatial coordinates
 
 ```r
 tissue_posi_normalized <- normalize_spatial(tissue_posi)
 ```
 
-#### 3. Merge spatial and metadata information
+### 3. Merge spatial and metadata information
 
 ```r
 posi <- merge(
-  x     = tissue_posi_normalized,
-  y     = metadata,
-  by.x  = "Newbarcode",
-  by.y  = "row.names",
+  x = tissue_posi_normalized,
+  y = metadata,
+  by.x = "Newbarcode",
+  by.y = "row.names",
   all.y = TRUE
 )
 ```
 
-#### 4. Calculate nearest distances between cell types
+### 4. Calculate nearest distances between cell types
 
 ```r
 distance_results <- calculate_nearest_distances(
   posi,
   reference_type = "Macrophage",
-  target_types   = c("Epithelial_cells_A", "Epithelial_cells_B", "Epithelial_cells_C"),
-  x_col          = "pxl_row_in_fullres",
-  y_col          = "pxl_col_in_fullres",
-  id_col         = "Newbarcode",
-  type_col       = "celltype_ABCDepi",
-  sample_col     = "orig.ident"   # recommended for multi-sample data frames
+  target_types = c("Epithelial_cells_A", "Epithelial_cells_B", "Epithelial_cells_C"),
+  x_col = "pxl_row_in_fullres",
+  y_col = "pxl_col_in_fullres",
+  id_col = "Newbarcode",
+  type_col = "celltype_ABCDepi"
 )
 ```
 
-#### 5. Compare distance among subgroups
+### 5. Compare distance among subgroups
 
 ```r
 plot_distance_boxplot(
@@ -234,7 +149,7 @@ plot_distance_boxplot(
 )
 ```
 
-#### 6. Create radial network visualization
+### 6. Create radial network visualization
 
 ```r
 plot_radial_distance(
@@ -247,7 +162,7 @@ plot_radial_distance(
 )
 ```
 
-#### 7. Spatial visualization of interactions
+### 7. Spatial visualization of interactions
 
 Between two cell types:
 ```r
@@ -296,7 +211,7 @@ visualize_spatial_gradient(
 )
 ```
 
-#### 8. Correlation analysis
+### 8. Correlation analysis
 
 ```r
 result_correlation <- calculate_correlations(
@@ -334,26 +249,17 @@ STDistance can be used for various spatial transcriptomics analyses:
 Common issues and solutions:
 
 1. **Missing columns error**: Ensure your input files contain all required columns:
-   - Spatial file: Must have coordinate columns (default `"pxl_row_in_fullres"` and `"pxl_col_in_fullres"`)
-   - Metadata: Must have a cell type annotation column
+   - Spatial file: Must have coordinate columns (default "pxl_row_in_fullres" and "pxl_col_in_fullres")
+   - Metadata: Must have cell type annotation column
 
 2. **No distances calculated**: Check that:
    - Your reference and target cell types exist in the metadata
-   - The `type_col` parameter correctly specifies your cell type column name
+   - The type_col parameter correctly specifies your cell type column name
    - There are actually cells of the specified types in your sample
 
-3. **RDS input — Seurat version mismatch**: If you see warnings about `SeuratObject` being built under a different R or Matrix version, update the object before saving:
-   ```r
-   library(Seurat)
-   obj <- UpdateSeuratObject(readRDS("your_file.RDS"))
-   saveRDS(obj, "your_file_v5.RDS")
-   ```
-
-4. **Cross-sample nearest-neighbour matches**: If distance results show reference spots from one sample matched to target spots in another sample, you have not set `sample_col`. Add `sample_col = "orig.ident"` (or whichever column identifies the sample) to `calculate_nearest_distances()`.
-
-5. **Visualization issues**:
-   - For crowded plots, try adjusting `point_size` and `alpha` parameters
-   - For color issues, specify a custom `color_palette`
+3. **Visualization issues**: 
+   - For crowded plots, try adjusting point_size and alpha parameters
+   - For color issues, specify a custom color_palette
 
 ## Citation
 
